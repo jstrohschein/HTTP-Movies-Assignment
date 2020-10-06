@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import MovieCard from "./MovieCard";
 import { useHistory } from 'react-router-dom'
+import { Button } from 'reactstrap'
 
 function MovieList({ movies }) {
 
@@ -9,7 +10,7 @@ function MovieList({ movies }) {
 
   return (
     <div className="movie-list">
-      <button onClick={() => push('/add-movie')}>Add Movie</button>
+      <Button color='primary' onClick={() => push('/add-movie')} className='button'>Add Movie</Button>
       {
         movies.map(movie => (
           <Link key={movie.id} to={`/movies/${movie.id}`}>

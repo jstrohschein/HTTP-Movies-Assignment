@@ -1,30 +1,43 @@
 import axios from 'axios';
 import React, { useEffect, useState }from 'react'
 import { useForm } from 'react-hook-form';
-import { useParams } from 'react-router-dom'
+import { useParams, useHistory } from 'react-router-dom'
+import { Form, InputGroup, Button } from 'reactstrap'
+import { yupResolver } from '@hookform/resolvers/yup'
+import { FormInput } from './FormInput'
+import * as yup from 'yup'
+import { schema } from './AddMovie'
 
-const initialMovie = {
-  id: '',
-  title: '',
-  director: '',
-  metascore: '',
-  stars: []
-}
+
+
 
 const UpdateMovie = props => {
 
-  const [movie, setMovie] = useState(initialMovie)
-  
-  const { register, handleSubmit, watch, errors } = useForm()
   const { id } = useParams()
+  const { push } = useHistory()
 
-  const submitChanges = changes => {
+  const { register, handleSubmit, errors } = useForm({
+    mode: 'onBlur',
+    resolver: yupResolver(schema)
+  })
+  
+  const [movie, setMovie] = useState({})
+
+  //console.log('Movie:', movie)
+
+  const onSubmit = data => {
+
+    console.log('data:', data)
+
+    const changes = {...movie, title: data.title, director: data.director, metascore: data.metascore}
+
     console.log('UpdateMovie.jsx: submitChanges: changes: ', changes)
+     
     axios
       .put(`http://localhost:5000/api/movies/${id}`, changes)
       .then(res => {
         console.log('UpdateMovie.js: submitChanges: axios success: ', res)
-        props.setMovieList(res.data)
+        push('/')
       })
       .catch(err => console.log(err))
   }
@@ -35,19 +48,53 @@ const UpdateMovie = props => {
       .get(`http://localhost:5000/api/movies/${id}`)
       .then(res => {
         console.log('UpdateMovie.jsx: axios res: ', res)
+        setMovie(res.data)
       })
       .catch(err => console.log(err))
   }, [id])
   
 
   return (
-    <form onSubmit={handleSubmit(submitChanges)}>
-      <label htmlFor='' />
-      <input
-        type='text'
-        name
-      />
-    </form>
+    <Form onSubmit={handleSubmit(onSubmit)} className='form'>
+
+      <InputGroup>
+       <FormInput 
+          type='text'
+          id='title'
+          name='title'
+          label='Title'
+          placeholder={`${movie.title}`}
+          register={register}
+          errors={errors.title}
+        />
+      </InputGroup>
+
+      <InputGroup>
+        <FormInput 
+          type='text'
+          id='director'
+          name='director'
+          label='Director'
+          register={register}
+          placeholder={`${movie.director}`}
+          errors={errors.director}
+        />
+      </InputGroup>
+
+      <InputGroup>
+        <FormInput 
+          type='text'
+          id='metascore'
+          name='metascore'
+          label='metascore'
+          register={register}
+          placeholder={`${movie.metascore}`}
+          errors={errors.metascore}
+        />
+      </InputGroup>
+
+      <Button type='submit' className='newMovie-button'>Submit Changes </Button>
+    </Form>
   )
 
 }

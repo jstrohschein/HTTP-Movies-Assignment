@@ -75,3 +75,22 @@ body {
   color: red;
   text-align: center;
 }
+
+.form {
+  max-width: 20%;
+  margin: 0 auto;
+}
+
+.button {
+  margin-left: 3.5rem;
+}
+
+.newMovie-button {
+  margin-left: 3.5rem;
+  margin-top: 3.5rem;
+}
+
+.newStar-button {
+  margin-top: 1rem;
+  width: 300px;
+}

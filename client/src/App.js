@@ -14,7 +14,7 @@ const App = () => {
 
   const getMovieList = () => {
     axios
-      .get("http://localhost:5000/api/movies")
+      .get('http://localhost:5000/api/movies')
       .then(res => {
         console.log('Movies: ', res.data)
         setMovieList(res.data)})
