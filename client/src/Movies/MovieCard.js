@@ -1,7 +1,14 @@
 import React from 'react';
+import {useHistory, useParams} from 'react-router-dom'
+import axios from 'axios'
+
 
 const MovieCard = props => {
+
+
   const { title, director, metascore, stars } = props.movie;
+
+
   return (
     <div className="movie-card">
       <h2>{title}</h2>
